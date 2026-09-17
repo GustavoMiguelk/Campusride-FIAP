@@ -79,7 +79,23 @@ Content-Type: application/json
   "nomePassageiro": "Maria Clara"
 }
 
-### 11. Tentar reservar sem vagas disponíveis (deve dar 409)
+### 11. Reservar mais uma vaga na carona 1
+POST {{baseUrl}}/caronas/1/reservas
+Content-Type: application/json
+
+{
+  "nomePassageiro": "Fernanda Alves"
+}
+
+### 12. Reservar a última vaga da carona 1 (agora fica LOTADA)
+POST {{baseUrl}}/caronas/1/reservas
+Content-Type: application/json
+
+{
+  "nomePassageiro": "Rafael Costa"
+}
+
+### 13. Tentar reservar sem vagas disponíveis (deve dar 409, carona já lotada)
 POST {{baseUrl}}/caronas/1/reservas
 Content-Type: application/json
 
@@ -87,16 +103,16 @@ Content-Type: application/json
   "nomePassageiro": "Passageiro Extra"
 }
 
-### 12. Cancelar uma reserva
+### 14. Cancelar uma reserva
 DELETE {{baseUrl}}/reservas/1
 
-### 13. Cancelar a mesma reserva de novo (deve dar 409)
+### 15. Cancelar a mesma reserva de novo (deve dar 409)
 DELETE {{baseUrl}}/reservas/1
 
-### 14. Cancelar a carona 1 (deve refletir nas reservas confirmadas)
+### 16. Cancelar a carona 1 (deve refletir nas reservas confirmadas)
 DELETE {{baseUrl}}/caronas/1
 
-### 15. Tentar reservar em carona já cancelada (deve dar 409)
+### 17. Tentar reservar em carona já cancelada (deve dar 409)
 POST {{baseUrl}}/caronas/1/reservas
 Content-Type: application/json
 
@@ -104,5 +120,5 @@ Content-Type: application/json
   "nomePassageiro": "Tentativa Tardia"
 }
 
-### 16. Tentar cancelar a carona 1 de novo (deve dar 409)
+### 18. Tentar cancelar a carona 1 de novo (deve dar 409)
 DELETE {{baseUrl}}/caronas/1
