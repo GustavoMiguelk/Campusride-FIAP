@@ -1,0 +1,108 @@
+### CampusRide — coleção de requisições para teste manual
+### Compatível com REST Client (VS Code) ou IntelliJ HTTP Client.
+### Rode a aplicação (./gradlew bootRun) antes de disparar as requisições.
+
+@baseUrl = http://localhost:8080/api
+
+### 1. Publicar uma carona válida
+POST {{baseUrl}}/caronas
+Content-Type: application/json
+
+{
+  "nomeMotorista": "Ana Souza",
+  "origem": "Campus FIAP - Vila Olímpia",
+  "destino": "Estação Faria Lima",
+  "horarioPartida": "2026-12-01T08:30:00",
+  "tipoVeiculo": "CARRO_MEDIO",
+  "vagasTotais": 3
+}
+
+### 2. Publicar carona com vagas incompatíveis com o veículo (deve dar 400)
+POST {{baseUrl}}/caronas
+Content-Type: application/json
+
+{
+  "nomeMotorista": "Bruno Lima",
+  "origem": "Campus FIAP",
+  "destino": "Metrô Paraíso",
+  "horarioPartida": "2026-12-01T09:00:00",
+  "tipoVeiculo": "MOTO",
+  "vagasTotais": 4
+}
+
+### 3. Publicar carona com horário no passado (deve dar 400)
+POST {{baseUrl}}/caronas
+Content-Type: application/json
+
+{
+  "nomeMotorista": "Carla Dias",
+  "origem": "Campus FIAP",
+  "destino": "Shopping Ibirapuera",
+  "horarioPartida": "2020-01-01T09:00:00",
+  "tipoVeiculo": "CARRO_PEQUENO",
+  "vagasTotais": 2
+}
+
+### 4. Listar caronas disponíveis (default: somenteDisponiveis=true)
+GET {{baseUrl}}/caronas
+
+### 5. Listar todas as caronas, independente da situação
+GET {{baseUrl}}/caronas?somenteDisponiveis=false
+
+### 6. Detalhar uma carona específica
+GET {{baseUrl}}/caronas/1
+
+### 7. Detalhar carona inexistente (deve dar 404)
+GET {{baseUrl}}/caronas/9999
+
+### 8. Reservar uma vaga na carona 1
+POST {{baseUrl}}/caronas/1/reservas
+Content-Type: application/json
+
+{
+  "nomePassageiro": "João Pedro"
+}
+
+### 9. Reservar sem informar o passageiro (deve dar 400)
+POST {{baseUrl}}/caronas/1/reservas
+Content-Type: application/json
+
+{
+  "nomePassageiro": ""
+}
+
+### 10. Reservar em carona inexistente (deve dar 404)
+POST {{baseUrl}}/caronas/9999/reservas
+Content-Type: application/json
+
+{
+  "nomePassageiro": "Maria Clara"
+}
+
+### 11. Tentar reservar sem vagas disponíveis (deve dar 409)
+POST {{baseUrl}}/caronas/1/reservas
+Content-Type: application/json
+
+{
+  "nomePassageiro": "Passageiro Extra"
+}
+
+### 12. Cancelar uma reserva
+DELETE {{baseUrl}}/reservas/1
+
+### 13. Cancelar a mesma reserva de novo (deve dar 409)
+DELETE {{baseUrl}}/reservas/1
+
+### 14. Cancelar a carona 1 (deve refletir nas reservas confirmadas)
+DELETE {{baseUrl}}/caronas/1
+
+### 15. Tentar reservar em carona já cancelada (deve dar 409)
+POST {{baseUrl}}/caronas/1/reservas
+Content-Type: application/json
+
+{
+  "nomePassageiro": "Tentativa Tardia"
+}
+
+### 16. Tentar cancelar a carona 1 de novo (deve dar 409)
+DELETE {{baseUrl}}/caronas/1

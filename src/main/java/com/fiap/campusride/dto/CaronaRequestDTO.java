@@ -5,9 +5,11 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import com.fiap.campusride.validacao.VagasCompativeisComVeiculo;
 
 import java.time.LocalDateTime;
 
+@VagasCompativeisComVeiculo
 public record CaronaRequestDTO(
 
         @NotBlank(message = "O nome do motorista e obrigatorio")
